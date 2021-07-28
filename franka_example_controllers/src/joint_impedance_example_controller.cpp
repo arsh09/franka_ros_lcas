@@ -105,12 +105,14 @@ bool JointImpedanceExampleController::init(hardware_interface::RobotHW* robot_hw
     return false;
   }
 
+
   auto* effort_joint_interface = robot_hw->get<hardware_interface::EffortJointInterface>();
   if (effort_joint_interface == nullptr) {
     ROS_ERROR_STREAM(
         "JointImpedanceExampleController: Error getting effort joint interface from hardware");
     return false;
   }
+
   for (size_t i = 0; i < 7; ++i) {
     try {
       joint_handles_.push_back(effort_joint_interface->getHandle(joint_names[i]));
@@ -120,6 +122,7 @@ bool JointImpedanceExampleController::init(hardware_interface::RobotHW* robot_hw
       return false;
     }
   }
+
   torques_publisher_.init(node_handle, "torque_comparison", 1);
 
   std::fill(dq_filtered_.begin(), dq_filtered_.end(), 0);
@@ -133,6 +136,8 @@ void JointImpedanceExampleController::starting(const ros::Time& /*time*/) {
 
 void JointImpedanceExampleController::update(const ros::Time& /*time*/,
                                              const ros::Duration& period) {
+
+ 
   if (vel_current_ < vel_max_) {
     vel_current_ += period.toSec() * std::fabs(vel_max_ / acceleration_time_);
   }
@@ -143,8 +148,8 @@ void JointImpedanceExampleController::update(const ros::Time& /*time*/,
     angle_ -= 2 * M_PI;
   }
 
-  double delta_y = radius_ * (1 - std::cos(angle_));
-  double delta_z = radius_ * std::sin(angle_);
+  double delta_y = 0; //radius_ * (1 - std::cos(angle_));
+  double delta_z = 0; //radius_ * std::sin(angle_);
 
   std::array<double, 16> pose_desired = initial_pose_;
   pose_desired[13] += delta_y;
@@ -172,7 +177,8 @@ void JointImpedanceExampleController::update(const ros::Time& /*time*/,
   std::array<double, 7> tau_d_saturated = saturateTorqueRate(tau_d_calculated, robot_state.tau_J_d);
 
   for (size_t i = 0; i < 7; ++i) {
-    joint_handles_[i].setCommand(tau_d_saturated[i]);
+    // joint_handles_[i].setCommand(tau_d_saturated[i]);
+    joint_handles_[i].setCommand(0);
   }
 
   if (rate_trigger_() && torques_publisher_.trylock()) {

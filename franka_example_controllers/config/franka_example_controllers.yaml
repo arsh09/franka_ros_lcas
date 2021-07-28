@@ -75,7 +75,7 @@ joint_impedance_example_controller:
         - 20.0
         - 20.0
         - 10.0
-    radius: 0.1
+    radius: 0.0
     acceleration_time: 2.0
     vel_max: 0.15
     publish_rate: 10.0
