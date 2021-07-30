@@ -30,7 +30,7 @@ class DataCollection:
         self.group = moveit_commander.MoveGroupCommander(group_name)
 
         self.experiment_name = "experiment_" 
-        self.experiment_count = 0
+        self.experiment_count = 191
 
         self.experiment_path = "~/data/"
 
