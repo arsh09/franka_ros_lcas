@@ -64,4 +64,10 @@
     </include>
   </group>
 
+  <include file="$(find xela_server)/launch/service.launch">
+  </include>
+
+  <!-- <node name="rqt_controller_manager_franka" pkg="rqt_controller_manager" type="rqt_controller_manager" output="screen"/> -->
+
+
 </launch>

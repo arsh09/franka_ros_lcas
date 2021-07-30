@@ -39,6 +39,37 @@
     <!-- poses for point cloud -->
     <group_state name="poseA" group="panda_arm">
       <joint name="panda_joint1" value="0" />
+      <joint name="panda_joint2" value="-0.24278732" />
+      <joint name="panda_joint3" value="-0.01923691" />
+      <joint name="panda_joint4" value="-1.87651432" />
+      <joint name="panda_joint5" value="-0.00768018" />
+      <joint name="panda_joint6" value="1.574732" />
+      <joint name="panda_joint7" value="0.81318551" />
+    </group_state>
+<!--  [-0.054376723940555954, 0.47107193895250726, 0.17132412009700984, -2.033785129495577, -0.03783123728979414, 2.4433970299296908, 0.9516244647689571] -->
+    <group_state name="nippleA" group="panda_arm">
+      <joint name="panda_joint1" value="-0.054376723940555954" />
+      <joint name="panda_joint2" value="0.47107193895250726" />
+      <joint name="panda_joint3" value="0.17132412009700984" />
+      <joint name="panda_joint4" value="-2.033785129495577" />
+      <joint name="panda_joint5" value="-0.03783123728979414" />
+      <joint name="panda_joint6" value="2.4433970299296908" />
+      <joint name="panda_joint7" value="0.9516244647689571" />
+    </group_state>
+
+<!-- [-0.05075450558463732, 0.33619116882018396, 0.24056689982070653, -2.2673909218436794, -0.1499714077506209, 2.6326718765970223, 0.33089223800978584,  -->
+    <group_state name="nippleB" group="panda_arm">
+      <joint name="panda_joint1" value="-0.05075450558463732" />
+      <joint name="panda_joint2" value="0.33619116882018396" />
+      <joint name="panda_joint3" value="0.24056689982070653" />
+      <joint name="panda_joint4" value="-2.2673909218436794" />
+      <joint name="panda_joint5" value="-0.1499714077506209" />
+      <joint name="panda_joint6" value="2.6326718765970223" />
+      <joint name="panda_joint7" value="0.33089223800978584" />
+    </group_state>
+
+    <!-- <group_state name="poseA" group="panda_arm">
+      <joint name="panda_joint1" value="0" />
       <joint name="panda_joint2" value="0.1270102160993837" />
       <joint name="panda_joint3" value="0.0852566818852856" />
       <joint name="panda_joint4" value="-1.5017109919598228" />
@@ -95,7 +126,7 @@
       <joint name="panda_joint5" value="0.06915401003123613" />
       <joint name="panda_joint6" value="2.5916731508698434" />
       <joint name="panda_joint7" value="0.720755857238736" />
-    </group_state>
+    </group_state> -->
 
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
