@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-for i in range(4, 210, 7):
+for i in range(7, 210, 7):
 
-    filepath = "/home/arshad/data/config_A/experiment_" + str(i) + ".bag"
+    filepath = "/home/arshad/data/config_B/experiment_" + str(i) + ".bag"
     print "Reading: {}".format(filepath)
     bagfile = rosbag.Bag(filepath)
 
