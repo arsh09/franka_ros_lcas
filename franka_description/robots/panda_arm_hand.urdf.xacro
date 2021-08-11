@@ -12,4 +12,19 @@
     <origin xyz="0.06 -0.06 0.025" rpy="${pi} ${-pi/2} ${-pi/4}" />
   </xacro:sensor_r430>
 
+
+  <!-- <link name="xela_sensor_frame"/> -->
+  <!-- <joint name="xela_sensor_joint" type="fixed">
+    <parent link="panda_leftfinger"/>
+    <child link="xela_sensor_frame"/>
+    <origin xyz="0.025 0.01 0.065 " rpy="0 0 0"/>
+  </joint> -->
+
+  <link name="xela_sensor_frame"/>
+  <joint name="xela_sensor_joint" type="fixed">
+    <parent link="panda_link8"/>
+    <child link="xela_sensor_frame"/>
+    <origin xyz="0.025 -0.011 0.123" rpy="0 0 0"/>
+  </joint>
+
 </robot>

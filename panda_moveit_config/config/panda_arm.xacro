@@ -68,6 +68,28 @@
       <joint name="panda_joint7" value="0.33089223800978584" />
     </group_state>
 
+<!-- [-0.013777106709055475, 0.39804385980602447, 0.07457416601831604, -2.1136673020640075, -0.01011319098046733, 2.4297943443565524, 1.4367238919482461, -->
+    <group_state name="nippleC" group="panda_arm">
+      <joint name="panda_joint1" value="-0.013777106709055475" />
+      <joint name="panda_joint2" value="0.39804385980602447" />
+      <joint name="panda_joint3" value="0.07457416601831604" />
+      <joint name="panda_joint4" value="-2.1136673020640075" />
+      <joint name="panda_joint5" value="-0.01011319098046733" />
+      <joint name="panda_joint6" value="2.4297943443565524" />
+      <joint name="panda_joint7" value="1.4367238919482461" />
+    </group_state>
+
+<!-- [0.0033272228759615727, 0.17591706981655317, 0.0461060038543639, -2.480672533383676, -0.005410064732307921, 2.602337698035745, 0.852062157835232, -->
+    <group_state name="nippleD" group="panda_arm">
+      <joint name="panda_joint1" value="0.0033272228759615727" />
+      <joint name="panda_joint2" value="0.17591706981655317" />
+      <joint name="panda_joint3" value="0.0461060038543639" />
+      <joint name="panda_joint4" value="-2.480672533383676" />
+      <joint name="panda_joint5" value="-0.005410064732307921" />
+      <joint name="panda_joint6" value="2.602337698035745" />
+      <joint name="panda_joint7" value="0.852062157835232" />
+    </group_state>
+
     <!-- <group_state name="poseA" group="panda_arm">
       <joint name="panda_joint1" value="0" />
       <joint name="panda_joint2" value="0.1270102160993837" />

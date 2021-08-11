@@ -30,7 +30,7 @@ class DataCollection:
         self.group = moveit_commander.MoveGroupCommander(group_name)
 
         self.experiment_name = "experiment_" 
-        self.experiment_count = 191
+        self.experiment_count = 0
 
         self.experiment_path = "~/data/"
 
@@ -42,12 +42,12 @@ class DataCollection:
 
     def go_to_home(self):
         print ("\nMoving to home pose. Please wait...")
-        self.group.set_max_velocity_scaling_factor(0.2)
+        self.group.set_max_velocity_scaling_factor(1)
         self.group.set_named_target('poseA')
         self.group.go(wait=True)
         time.sleep(1)
 
-        self.group.set_named_target('nippleB')
+        self.group.set_named_target('nippleD')
         self.group.go(wait=True)
         # time.sleep(3)
 
