@@ -48,7 +48,7 @@ class DataCollection:
         cv2.setMouseCallback('image', self.select_point_cb)
 
         self.experiment_name = "experiment_" 
-        self.experiment_count = 0
+        self.experiment_count = 78
 
         self.experiment_path = "~/data/"
 
