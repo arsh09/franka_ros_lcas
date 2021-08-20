@@ -72,5 +72,4 @@
 
   <!-- <node name="rqt_controller_manager_franka" pkg="rqt_controller_manager" type="rqt_controller_manager" output="screen"/> -->
 
-
 </launch>
