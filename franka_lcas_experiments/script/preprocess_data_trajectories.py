@@ -37,12 +37,12 @@ def export_joint_and_cartesian_to_json():
     rospy.init_node('preprocess_data_trajectories')
     for i in range(1,308):
 
-        bag_path = "/media/arshad/Samsung_T5/data/experiment_" + str(i) + ".bag"
+        bag_path = "/home/arshad/experiment_" + str(i) + ".bag"
         if (os.path.isfile(bag_path)):
 
             bag = rosbag.Bag(bag_path)
 
-            json_path = "/media/arshad/Samsung_T5/process_data_zone_A/experiment_" + str(i) + ".json"
+            json_path = "/media/arshad/Samsung_T5/process_data_zone_D/experiment_" + str(i) + ".json"
             json_data = dict()
             json_data['joint_position'] = []
             json_data['joint_speed'] = []
@@ -87,9 +87,9 @@ def export_color_and_depth_images():
 
     for i in range(308):
 
-        bag_path = "/media/arshad/Samsung_T5/data/experiment_" + str(i) + ".bag"
-        color_path = "/media/arshad/Samsung_T5/process_data_zone_A/experiment_" + str(i) + "_color.npy"
-        depth_path = "/media/arshad/Samsung_T5/process_data_zone_A/experiment_" + str(i) + "_depth.npy"
+        bag_path = "/home/arshad/experiment_" + str(i) + ".bag"
+        color_path = "/media/arshad/Samsung_T5/process_data_zone_D/experiment_" + str(i) + "_color.npy"
+        depth_path = "/media/arshad/Samsung_T5/process_data_zone_D/experiment_" + str(i) + "_depth.npy"
 
 
         if (os.path.isfile(bag_path)):
@@ -115,8 +115,8 @@ def export_point_cloud_data():
 
     for i in range(1,307):
     # i = 1
-        bag_path = "/media/arshad/Samsung_T5/data/experiment_" + str(i) + ".bag"
-        pst_path = "/media/arshad/Samsung_T5/process_data_zone_A/experiment_" + str(i) + "_pointcloud.npy"
+        bag_path = "/home/arshad/experiment_" + str(i) + ".bag"
+        pst_path = "/media/arshad/Samsung_T5/process_data_zone_D/experiment_" + str(i) + "_pointcloud.npy"
 
         if os.path.isfile(bag_path): 
             bag = rosbag.Bag(bag_path)
@@ -158,7 +158,7 @@ def plot_2d_end_points():
     end_points = []
     for i in range(1,308):
 
-        json_path = "/media/arshad/Samsung_T5/process_data_zone_A/experiment_" + str(i) + ".json"
+        json_path = "/media/arshad/Samsung_T5/process_data_zone_D/experiment_" + str(i) + ".json"
 
         if (os.path.isfile(json_path)):
             # get last point
@@ -183,6 +183,48 @@ def plot_2d_end_points():
     plt.show()
 
 
+def plot_2d_end_points_for_all_zones():
+
+    # range on XY plane for world (From base)
+    # 0.309809791327 -0.260155091999 0.116137658563
+    # 0.682918533702 0.216092091272 0.0953567279476
+    # 0.685449990365 -0.231814252613 0.0927342125951
+    
+    zones = ['A', 'B', 'C', 'D'] 
+    color_end = ['red', 'green', 'yellow', 'brown']
+    for count, zone in enumerate(zones): 
+        start_points = []   
+        end_points = []
+        for i in range(1,308):
+
+            json_path = "/media/arshad/Samsung_T5/process_data_zone_" + zone + "/experiment_" + str(i) + ".json"
+
+            if (os.path.isfile(json_path)):
+                # get last point
+                with open(json_path, 'r') as read_file:
+                    data = json.load( read_file )
+                    start_points.append( data['base_to_eef_position'][0] )
+                    end_points.append( data['base_to_eef_position'][-1] )
+
+        start_points = np.array( start_points )
+        end_points = np.array( end_points )
+        
+        set_plot_properties()
+        fig = plt.figure(1, figsize=(16,10))
+        plt.scatter( end_points[:,0], end_points[:,1], label = 'StopPoint Zone: ' + zone  , c = color_end[count], s = 70)
+        plt.scatter( start_points[:,0], start_points[:,1], label = 'Start Point', c = 'black', s = 70)
+
+
+
+    plt.xlabel('X (in m)')
+    plt.ylabel('Y (in m)')
+    plt.xlim([0.2, 0.8])
+    plt.ylim([-0.3, 0.3])
+    # plt.legend()
+    plt.title('Cartesian XY w.r.t base')
+    plt.show()
+
+
 def plot_color_and_depth_images():
 
     color_img = np.zeros((640, 480, 3))
@@ -190,8 +232,8 @@ def plot_color_and_depth_images():
     try: 
 
         for i in range(1,308):
-            color_path = "/media/arshad/Samsung_T5/process_data_zone_A/experiment_" + str(i) + "_color.npy"
-            depth_path = "/media/arshad/Samsung_T5/process_data_zone_A/experiment_" + str(i) + "_depth.npy"
+            color_path = "/media/arshad/Samsung_T5/process_data_zone_D/experiment_" + str(i) + "_color.npy"
+            depth_path = "/media/arshad/Samsung_T5/process_data_zone_D/experiment_" + str(i) + "_depth.npy"
 
             if (os.path.isfile(color_path)):
                 color_img = np.load(color_path)
@@ -211,7 +253,7 @@ def plot_point_cloud():
 
     pointcloud = None
     for i in range(1,308):
-        pc_path = "/media/arshad/Samsung_T5/process_data_zone_A/experiment_" + str(i) + "_pointcloud.npy"
+        pc_path = "/media/arshad/Samsung_T5/process_data_zone_D/experiment_" + str(i) + "_pointcloud.npy"
 
         if (os.path.isfile(pc_path)):
             pointcloud = np.load(pc_path)
@@ -225,6 +267,7 @@ if __name__ == '__main__':
     # export_color_and_depth_images()
     # export_joint_and_cartesian_to_json()
 
-    plot_2d_end_points()
+    plot_2d_end_points_for_all_zones()
+    # plot_2d_end_points()
     # plot_color_and_depth_images()
     # plot_point_cloud()
