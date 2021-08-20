@@ -48,7 +48,7 @@ class DataCollection:
         cv2.setMouseCallback('image', self.select_point_cb)
 
         self.experiment_name = "experiment_" 
-        self.experiment_count = 189
+        self.experiment_count = 0
 
         self.experiment_path = "~/data/"
 
@@ -110,8 +110,8 @@ class DataCollection:
                 rospy.loginfo("TF Exception")
                 continue
 
-        self.record_bag_file()
-        self.plan_with_camera(trans1)
+        # self.record_bag_file()
+        # self.plan_with_camera(trans1)
 
     def depth_image_cb(self, data):
         self.depth_msg_received = True
