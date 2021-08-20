@@ -1,0 +1,6 @@
+<launch>
+
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find franka_description)/robots/panda_arm_hand.urdf.xacro'"  />
+    <!-- <node name="preprocess_data_trajectories" pkg="franka_lcas_experiments" type="preprocess_data_trajectories.py" /> -->
+
+</launch>

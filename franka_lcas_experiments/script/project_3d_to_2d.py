@@ -10,7 +10,7 @@ from sensor_msgs.msg import Image, CameraInfo
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 
-from tf.transformations import quaternion_matrix
+from tf.transformations import quaternion_from_matrix
 import tf
 
 
