@@ -8,6 +8,10 @@
   <xacro:hand ns="panda" rpy="0 0 ${-pi/4}" connected_to="panda_link8"/>
 
 
+  <!-- <xacro:sensor_r430 prefix="" prefix_topic="" parent="panda_link8">
+    <origin xyz="0.06 -0.06 0.025" rpy="${pi} ${-pi/2} ${-pi/4}" />
+  </xacro:sensor_r430> -->
+
   <xacro:sensor_r430 prefix="" prefix_topic="" parent="panda_link8">
     <origin xyz="0.06 -0.06 0.025" rpy="${pi} ${-pi/2} ${-pi/4}" />
   </xacro:sensor_r430>
