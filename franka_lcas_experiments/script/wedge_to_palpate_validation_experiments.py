@@ -51,6 +51,8 @@ class WedgeToPalpateValidation:
         self.depth_sub = rospy.Subscriber('/depth/image_rect_raw', Image, self.depth_image_cb)
 
         self.img_msg = None
+        self.img_msg_rtp = None
+        self.img_shown = None
         self.depth_msg = None
         self.img_info_msg = None
         self.img_msg_received = False
@@ -66,8 +68,8 @@ class WedgeToPalpateValidation:
         self.rosbag_proc = None
         self.is_recording = False
 
-        self.imgX = None
-        self.imgY = None
+        self.imgX = -1
+        self.imgY = -1
         self.drawXY = True
 
         # setup for forward kinematics 
@@ -81,6 +83,10 @@ class WedgeToPalpateValidation:
         self.pointcloud = np.array([])
         self.pointcloud_sub = rospy.Subscriber('/depth/color/points', PointCloud2, self.pointcloud_cb)
 
+        self.planned_path = None
+
+        self.acquire_pointcloud_at_home_pose()
+        self.print_options()
         self.loop()
 
     def select_point_cb(self, event,x,y,flags,param):
@@ -126,16 +132,21 @@ class WedgeToPalpateValidation:
 
         self.do_acquire_pc = False
 
-
     def color_image_cb(self , data):
         
         self.img_msg_received = True
         self.img_msg = self.bridge.imgmsg_to_cv2(data, desired_encoding='passthrough')
-        # self.img_msg = cv2.cvtColor(img_msg, cv2.COLOR_RGB2BGR )
+        
         w,h,c = self.img_msg.shape 
 
-        self.img_msg = self.img_msg[:, int( (h-w) / 2):int ( h - (h-w)/2 ), :]
-        self.img_msg = imutils.resize( self.img_msg, width = 256 )
+        # self.img_msg = self.img_msg[:, int( (h-w) / 2):int ( h - (h-w)/2 ), :]
+        # self.img_msg = imutils.resize( self.img_msg, width = 256, height = 256 )
+
+        self.img_msg = cv2.resize( self.img_msg, (256, 256) )
+
+        self.img_shown = cv2.cvtColor(self.img_msg, cv2.COLOR_RGB2BGR )
+        self.img_msg_rtp = self.img_msg.copy()
+        # self.img_shown = self.img_msg.copy()
 
     def plan_with_camera(self, trans1):
 
@@ -187,18 +198,25 @@ class WedgeToPalpateValidation:
         return trans.tolist()[0], rot.tolist()
         # print (trans.tolist()[0], rot.tolist())
 
-    def move_robot_to_joint_trajectory(self, traj_true):
-        
+    def acquire_pointcloud_at_home_pose(self):
+
+        self.go_to_home(pose="poseA")
         self.do_acquire_pc = True
         while self.do_acquire_pc: 
             pass 
 
-
-        if (self.pointcloud.shape[0] > 0):
-            print (self.pointcloud.shape)
+    def move_robot_to_joint_trajectory(self, traj_true):
+        
+        # self.go_to_home(pose="nippleA")
 
         q1pred,q2pred,q3pred,q4pred,q5pred,q6pred,q7pred = traj_true[0:150], traj_true[150:300], traj_true[300:450], traj_true[450:600], traj_true[600:750], traj_true[750:900], traj_true[900:1050]
-        # self.go_to_home(pose="nippleA")
+
+        # nipple A
+        nippleA_pose = [-0.0543767, 0.471072, 0.171324, -2.03379, -0.0378312, 2.4434, 0.951624]
+        # nippleA_pose = [-0.0507545, 0.336191, 0.240567, -2.26739, -0.149971, 2.63267, 0.330892]
+
+ 
+        is_start_pose = True
 
         # joint space path plan
         msg = JointTrajectory()
@@ -209,21 +227,27 @@ class WedgeToPalpateValidation:
         waypoints = []
         wpose = self.group.get_current_pose().pose
         
-
         dt = 0.1
-        dx = 0.0025
-        dy = 0.0025
+        dx = 0.01
+        dy = 0.01
 
-        for i in range(q1pred.shape[0] - 50):
-            _joints_all = [q1pred[i],q2pred[i],q3pred[i],q4pred[i],q5pred[i],q6pred[i],q7pred[i]]
+        last_z = 0.85
+        # for i in range(25, q1pred.shape[0] - 25):
+        for i in range( q1pred.shape[0] ):
+            if is_start_pose: 
+                is_start_pose = False
+                _joints_all = nippleA_pose
+            else:
+                _joints_all = [q1pred[i],q2pred[i],q3pred[i],q4pred[i],q5pred[i],q6pred[i],q7pred[i]]
+            
             point = JointTrajectoryPoint()            
             point.positions = _joints_all 
             point.time_from_start = rospy.Duration( i * dt + 1 )
             msg.points.append( point ) 
 
             trans, rot = self.get_forward_kinematics ( _joints_all )            
-            wpose.position.x = trans[0]
-            wpose.position.y = trans[1]
+            wpose.position.x = trans[0]  
+            wpose.position.y = trans[1] 
 
             # z_index = np.where( (self.pointcloud[:, 0] > (trans[0]+dx)) & (self.pointcloud[:,0] < (trans[0] - dx)) )
             z_index = np.where( 
@@ -234,15 +258,18 @@ class WedgeToPalpateValidation:
 
             all_z_points_on_breast = (self.pointcloud[z_index])[:,2]
 
-            print ( np.mean(all_z_points_on_breast), np.std(all_z_points_on_breast), np.median(all_z_points_on_breast), trans[2] , z_index[0].shape)
+            # print ( trans[2], np.mean(all_z_points_on_breast),  np.median(all_z_points_on_breast), z_index[0].shape)
 
             if (all_z_points_on_breast.shape[0] > 0):
-                wpose.position.z = np.median(all_z_points_on_breast) #- 0.0075
+                wpose.position.z = np.median(all_z_points_on_breast) + 0.0095
+                last_z = np.median(all_z_points_on_breast) + 0.0095
+                
 
             else:
-                if trans[2] < 0.085: 
-                    trans[2] = 0.085
+                wpose.position.z = last_z
 
+                if trans[2] < 0.080: 
+                    trans[2] = 0.080
                 wpose.position.z = trans[2]                    
 
             wpose.orientation.x = rot[0]
@@ -256,19 +283,14 @@ class WedgeToPalpateValidation:
         # make cartesian path planning 
         plan, fraction = self.group.compute_cartesian_path( waypoints, 0.01, 0.0 ) 
 
-        replan = self.group.retime_trajectory( self.robot.get_current_state(), plan, velocity_scaling_factor = 0.05) 
+        self.planned_path = self.group.retime_trajectory( self.robot.get_current_state(), plan, velocity_scaling_factor = 0.05) 
 
-        print("\nCartesian plan fraction is {}".format(fraction))
         # display cartesian path 
         display_trajectory = moveit_msgs.msg.DisplayTrajectory()
         display_trajectory.trajectory_start = self.robot.get_current_state()
-        display_trajectory.trajectory.append(replan)
+        display_trajectory.trajectory.append(self.planned_path)
         # Publish
         self.display_trajectory_publisher.publish(display_trajectory)
-
-        decision = raw_input("\n---------------------------\nPress 'y' to execute the trajectory and 'n' to cancel it\n----------------------\n")
-        if (decision.lower() == 'y'):
-            self.group.execute(replan, wait=True)
         
         # display joint trajecotry
         # robot_traj_complete = moveit_msgs.msg.RobotTrajectory()
@@ -279,11 +301,25 @@ class WedgeToPalpateValidation:
         # # Publish
         # self.display_trajectory_publisher.publish(display_trajectory)
         
-
         # self.go_to_home()
         # rospy.loginfo("waiting...")
         # self.trajectory_pub.publish(msg) 
         
+    def do_execute_planned_path(self):
+
+        if (self.planned_path != None):
+            self.group.execute(self.planned_path, wait=True)
+
+    def print_options(self):
+
+        print("\n  Click on image for target point and then select one of the options, ")
+        print("  1) press s to save image and target point. ")
+        print("  2) press r to predict the RTP trajectory. ")
+        print("  3) press w to predict the WPP trajectory. ")
+        print("  4) press p to display the predicted trajectory. ")
+        print("  5) press e to execute the predicted trajectory")
+        print("  6) Press h to take robot to home pose. ")
+        print("  7) Press ESC to close" )    
 
     def loop(self):
 
@@ -292,10 +328,10 @@ class WedgeToPalpateValidation:
             if self.img_msg_received and self.depth_msg_received:
                 w,h,c = self.img_msg.shape 
                 if self.drawXY and self.imgX != None : 
-                    cv2.circle( self.img_msg, (self.imgX, self.imgY), 10, (40,48,88), -1)
+                    cv2.circle( self.img_shown, (self.imgX, self.imgY), 10, (40,48,88), -1)
 
                 if w == 256 and h == 256 :
-                    cv2.imshow('image', self.img_msg)
+                    cv2.imshow('image', self.img_shown)
 
                 k = cv2.waitKey(33)
                 if k==27:    # Esc key to stop
@@ -303,12 +339,13 @@ class WedgeToPalpateValidation:
                 elif k==-1:  # normally -1 returned,so don't print it
                     continue
                 else:
+                    self.print_options()
                     if k == ord('c'):
                         self.drawXY = not self.drawXY
                     if k == ord('s'): 
-                        rospy.loginfo("Writing image to a file in catkin_ws/ folder with X: {} and Y: {}".format(self.imgX, self.imgY))
+                        cv2.imwrite('./image_rtp.png', self.img_msg_rtp)
+                        np.save('./image_xy_rtp.npy', np.reshape( self.img_msg_rtp, (1,256,256, 3) ) )
                         cv2.circle( self.img_msg, (self.imgX, self.imgY), 10, (40,48,88), -1)
-            
                         cv2.imwrite('./image.png', self.img_msg)
                         saved_img = np.reshape( self.img_msg, (1,256,256,3))
                         np.save( './image_xy.npy', saved_img )
@@ -316,23 +353,22 @@ class WedgeToPalpateValidation:
                         np.save('./image_target_xy.npy', target_point )
 
                     if k == ord('r'):
-                        rospy.loginfo("Activating the virtual environment")
+                        command = ["python3", "/home/arshad/catkin_ws/src/franka_ros_lcas/franka_lcas_experiments/script/load_model_rtp.py"]
+                        subprocess.call(command)
+
+                    if k == ord('w'):
                         command = ["python3", "/home/arshad/catkin_ws/src/franka_ros_lcas/franka_lcas_experiments/script/load_model.py"]
                         subprocess.call(command)
-                        print("\n\nSelect another point on image, \n 1) press s to save.\n 2) press r to predict. \n 3) press p to display. \n 4) After display, click 'y' on terminal to execute the trajectory. \n 6) Press h to take robot to home pose. \n 6) Press ESC to close")    
 
                     if k == ord('h'):
                         self.go_to_home(pose="poseA")
 
                     if k == ord('p'):
-                        
-                        # _data = pd.read_csv( '/home/arshad/catkin_ws/experiment10_relu_7_traj_data.csv', skipinitialspace=True )                        
-                        # traj_true = _data['q_predictions'].values                   
-                        # print (traj_true.shape)
-
                         traj_true = np.load('/home/arshad/catkin_ws/predicted_joints_values.npy')
                         self.move_robot_to_joint_trajectory(traj_true)
 
+                    if k == ord('e'):
+                        self.do_execute_planned_path()
 
         cv2.destroyAllWindows()
 

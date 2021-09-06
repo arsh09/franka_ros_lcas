@@ -12,10 +12,13 @@
     <origin xyz="0.06 -0.06 0.025" rpy="${pi} ${-pi/2} ${-pi/4}" />
   </xacro:sensor_r430> -->
 
-  <xacro:sensor_r430 prefix="" prefix_topic="" parent="panda_link8">
+  <!-- <xacro:sensor_r430 prefix="" prefix_topic="" parent="panda_link8">
     <origin xyz="0.06 -0.06 0.025" rpy="${pi} ${-pi/2} ${-pi/4}" />
-  </xacro:sensor_r430>
+  </xacro:sensor_r430> -->
 
+  <xacro:sensor_r430 prefix="" prefix_topic="" parent="panda_link8">
+    <origin xyz="0.06 -0.06 0.0325" rpy="${pi} ${-pi/2} ${-pi/4}" />
+  </xacro:sensor_r430>
 
   <!-- <link name="xela_sensor_frame"/> -->
   <!-- <joint name="xela_sensor_joint" type="fixed">

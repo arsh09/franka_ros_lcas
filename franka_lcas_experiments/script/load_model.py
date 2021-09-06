@@ -13,13 +13,13 @@ from utils import ProMP
 
 ENCODER_MODEL_PATH = '/home/arshad/Documents/wedge_to_palpate_validation_models/encoded_model'
 
-print ( "ENCODER_MODEL_PATH exists?", os.path.isdir( ENCODER_MODEL_PATH ))
+# print ( "ENCODER_MODEL_PATH exists?", os.path.isdir( ENCODER_MODEL_PATH ))
  
 encoder_model = tf.keras.models.load_model(ENCODER_MODEL_PATH)
 encoder = Model(encoder_model.input, encoder_model.get_layer('bottleneck').output )
  
 EXPERIMENT_PATH = '/home/arshad/Documents/wedge_to_palpate_validation_models/spatial_model_experiment10_relu'
-print ( "EXPERIMENT_PATH exists?", os.path.isdir( EXPERIMENT_PATH ))
+# print ( "EXPERIMENT_PATH exists?", os.path.isdir( EXPERIMENT_PATH ))
 
 exp_model = tf.keras.models.load_model(EXPERIMENT_PATH, compile=False)
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
     target_point = np.reshape( target_point, (1,2) )
 
-    print ("\n\nReceived saved target image and target points. Predicting weights for DMP...")
+    # print ("\n\nReceived saved target image and target points. Predicting weights for DMP...")
     # print ( img_in_arry.shape, target_point ) 
 
     latent_dim = encoder.predict(img_in_arry)
@@ -58,6 +58,6 @@ if __name__ == "__main__":
     # print (traj_true[:30])
     q1pred,q2pred,q3pred,q4pred,q5pred,q6pred,q7pred = traj_true[0:150], traj_true[150:300], traj_true[300:450], traj_true[450:600], traj_true[600:750], traj_true[750:900], traj_true[900:1050]
 
-    print ("\n\nPredicted DMP weights are saved in the file. Press 'p' to display the trajectory...")
+    print ("  \nPredicted DMP weights are saved in the file. Press 'p' to display the trajectory...")
 
     np.save('/home/arshad/catkin_ws/predicted_joints_values.npy', traj_true)

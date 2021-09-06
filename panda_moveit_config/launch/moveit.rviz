@@ -4,14 +4,11 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /MotionPlanning1
-        - /MotionPlanning1/Scene Geometry1
-        - /MotionPlanning1/Scene Robot1
-        - /MotionPlanning1/Planning Request1
-        - /TF1
         - /TF1/Frames1
+        - /MotionPlanning1
+        - /MotionPlanning1/Planning Request1
       Splitter Ratio: 0.481481493
-    Tree Height: 267
+    Tree Height: 825
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -42,7 +39,161 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
-    - Acceleration_Scaling_Factor: 0.5
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /color/image_raw
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /depth/image_rect_raw
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /depth/color/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        _camera_color_frame:
+          Value: false
+        _camera_color_optical_frame:
+          Value: true
+        _camera_depth_frame:
+          Value: false
+        _camera_depth_optical_frame:
+          Value: false
+        _camera_fisheye_frame:
+          Value: false
+        _camera_fisheye_optical_frame:
+          Value: false
+        _camera_left_ir_frame:
+          Value: false
+        _camera_left_ir_optical_frame:
+          Value: false
+        _camera_link:
+          Value: false
+        _camera_right_ir_frame:
+          Value: false
+        _camera_right_ir_optical_frame:
+          Value: false
+        panda_EE:
+          Value: false
+        panda_K:
+          Value: false
+        panda_hand:
+          Value: false
+        panda_leftfinger:
+          Value: true
+        panda_link0:
+          Value: false
+        panda_link1:
+          Value: false
+        panda_link2:
+          Value: false
+        panda_link3:
+          Value: false
+        panda_link4:
+          Value: false
+        panda_link5:
+          Value: false
+        panda_link6:
+          Value: false
+        panda_link7:
+          Value: false
+        panda_link8:
+          Value: false
+        panda_rightfinger:
+          Value: false
+        xela_sensor_frame:
+          Value: true
+      Marker Scale: 0.25
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        panda_link0:
+          panda_link1:
+            panda_link2:
+              panda_link3:
+                panda_link4:
+                  panda_link5:
+                    panda_link6:
+                      panda_link7:
+                        panda_link8:
+                          _camera_link:
+                            _camera_color_frame:
+                              _camera_color_optical_frame:
+                                {}
+                            _camera_depth_frame:
+                              _camera_depth_optical_frame:
+                                {}
+                              _camera_fisheye_frame:
+                                _camera_fisheye_optical_frame:
+                                  {}
+                              _camera_left_ir_frame:
+                                _camera_left_ir_optical_frame:
+                                  {}
+                              _camera_right_ir_frame:
+                                _camera_right_ir_optical_frame:
+                                  {}
+                          panda_EE:
+                            panda_K:
+                              {}
+                          panda_hand:
+                            panda_leftfinger:
+                              {}
+                            panda_rightfinger:
+                              {}
+                          xela_sensor_frame:
+                            {}
+      Update Interval: 0
+      Value: true
+    - Acceleration_Scaling_Factor: 1
       Class: moveit_rviz_plugin/MotionPlanning
       Enabled: true
       Move Group Namespace: ""
@@ -183,7 +334,7 @@ Visualization Manager:
         Show Trail: false
         State Display Time: 0.05 s
         Trail Step Size: 1
-        Trajectory Topic: move_group/display_planned_path
+        Trajectory Topic: /move_group/display_planned_path
       Planning Metrics:
         Payload: 1
         Show Joint Torques: false
@@ -193,20 +344,20 @@ Visualization Manager:
         TextHeight: 0.0799999982
       Planning Request:
         Colliding Link Color: 255; 0; 0
-        Goal State Alpha: 0.25
+        Goal State Alpha: 1
         Goal State Color: 250; 128; 0
-        Interactive Marker Size: 0.100000001
+        Interactive Marker Size: 0.25
         Joint Violation Color: 255; 0; 255
         Planning Group: panda_arm
-        Query Goal State: true
+        Query Goal State: false
         Query Start State: false
         Show Workspace: false
-        Start State Alpha: 0.25
+        Start State Alpha: 1
         Start State Color: 0; 255; 0
       Planning Scene Topic: move_group/monitored_planning_scene
       Robot Description: robot_description
       Scene Geometry:
-        Scene Alpha: 1
+        Scene Alpha: 0.899999976
         Scene Color: 50; 230; 50
         Scene Display Time: 0.200000003
         Show Scene Geometry: true
@@ -320,165 +471,11 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-        Robot Alpha: 0.5
+        Robot Alpha: 1
         Show Robot Collision: false
         Show Robot Visual: true
       Value: true
       Velocity_Scaling_Factor: 0.10000000000000001
-    - Class: rviz/Image
-      Enabled: true
-      Image Topic: /color/image_raw
-      Max Value: 1
-      Median window: 5
-      Min Value: 0
-      Name: Image
-      Normalize Range: true
-      Queue Size: 2
-      Transport Hint: raw
-      Unreliable: false
-      Value: true
-    - Class: rviz/Image
-      Enabled: true
-      Image Topic: /depth/image_rect_raw
-      Max Value: 1
-      Median window: 5
-      Min Value: 0
-      Name: Image
-      Normalize Range: true
-      Queue Size: 2
-      Transport Hint: raw
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: RGB8
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 4096
-      Min Color: 0; 0; 0
-      Min Intensity: 0
-      Name: PointCloud2
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.00999999978
-      Style: Flat Squares
-      Topic: /depth/color/points
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Class: rviz/TF
-      Enabled: true
-      Frame Timeout: 15
-      Frames:
-        All Enabled: false
-        _camera_color_frame:
-          Value: false
-        _camera_color_optical_frame:
-          Value: true
-        _camera_depth_frame:
-          Value: false
-        _camera_depth_optical_frame:
-          Value: false
-        _camera_fisheye_frame:
-          Value: false
-        _camera_fisheye_optical_frame:
-          Value: false
-        _camera_left_ir_frame:
-          Value: false
-        _camera_left_ir_optical_frame:
-          Value: false
-        _camera_link:
-          Value: false
-        _camera_right_ir_frame:
-          Value: false
-        _camera_right_ir_optical_frame:
-          Value: false
-        panda_EE:
-          Value: false
-        panda_K:
-          Value: false
-        panda_hand:
-          Value: false
-        panda_leftfinger:
-          Value: true
-        panda_link0:
-          Value: false
-        panda_link1:
-          Value: false
-        panda_link2:
-          Value: false
-        panda_link3:
-          Value: false
-        panda_link4:
-          Value: false
-        panda_link5:
-          Value: false
-        panda_link6:
-          Value: false
-        panda_link7:
-          Value: false
-        panda_link8:
-          Value: false
-        panda_rightfinger:
-          Value: false
-        xela_sensor_frame:
-          Value: true
-      Marker Scale: 0.25
-      Name: TF
-      Show Arrows: true
-      Show Axes: true
-      Show Names: true
-      Tree:
-        panda_link0:
-          panda_link1:
-            panda_link2:
-              panda_link3:
-                panda_link4:
-                  panda_link5:
-                    panda_link6:
-                      panda_link7:
-                        panda_link8:
-                          _camera_link:
-                            _camera_color_frame:
-                              _camera_color_optical_frame:
-                                {}
-                            _camera_depth_frame:
-                              _camera_depth_optical_frame:
-                                {}
-                              _camera_fisheye_frame:
-                                _camera_fisheye_optical_frame:
-                                  {}
-                              _camera_left_ir_frame:
-                                _camera_left_ir_optical_frame:
-                                  {}
-                              _camera_right_ir_frame:
-                                _camera_right_ir_optical_frame:
-                                  {}
-                          panda_EE:
-                            panda_K:
-                              {}
-                          panda_hand:
-                            panda_leftfinger:
-                              {}
-                            panda_rightfinger:
-                              {}
-                          xela_sensor_frame:
-                            {}
-      Update Interval: 0
-      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -495,30 +492,30 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 1.07764482
+      Distance: 1.57707119
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.23807019
-        Y: 0.0796082467
-        Z: 4.02331921e-07
+        X: 0.357889295
+        Y: 0.548583746
+        Z: -1.49005928e-08
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.255203605
+      Pitch: 0.325203508
       Target Frame: panda_link0
       Value: XYOrbit (rviz)
-      Yaw: 0.736763656
+      Yaw: 0.726765156
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1015
+  Height: 1056
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -529,9 +526,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000200000000000002f7000003b1fc0200000008fb000000100044006900730070006c0061007900730100000028000001ac000000d700fffffffb0000000800480065006c00700000000342000000bb0000007300fffffffb0000000a0056006900650077007300000003b0000000b0000000ad00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb0000002e004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d00200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001da000001ff0000018300fffffffb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004a00ffffff000000020000042700000106fc0100000002fb0000000a0049006d00610067006501000002fd000001cc0000005c00fffffffb0000000a0049006d00610067006501000004cf000002550000005c00ffffff00000427000002a500000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000200000000000002fa000003dafc020000000afb000000100044006900730070006c0061007900730100000028000003da000000d700fffffffb0000000800480065006c00700000000342000000bb0000007300fffffffb0000000a0056006900650077007300000003b0000000b0000000ad00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb0000002e004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d00200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006700000001da000001ff0000018300fffffffb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004a00fffffffb000000280020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000000000000000fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000002740000018e0000000000000000000000020000043f00000106fc0100000002fb0000000a0049006d00610067006500000003000000043f0000005c00fffffffb0000000a0049006d00610067006500000002fd000004270000005c00ffffff0000043f000003da00000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1828
-  X: 80
+  Width: 1855
+  X: 65
   Y: 24
