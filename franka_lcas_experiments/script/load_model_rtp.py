@@ -53,5 +53,6 @@ if __name__ == "__main__":
 
     predictor = Predictor(ENCODED_MODEL_PATH, PREDICTOR_MODEL)
     traj = predictor.predict(image)
+
     np.save("/home/arshad/catkin_ws/predicted_joints_values_rtp.npy", traj)
-    print ("  \nPredicted DMP weights are saved in the file for RTP task. Press 'p' to display the trajectory...")
+    print ("\n  Predicted ProMPs weights for RTP task. Joint trajectory is saved in the file. \n  Press 'p' to display the trajectory...")

@@ -68,8 +68,8 @@ class WedgeToPalpateValidation:
         self.rosbag_proc = None
         self.is_recording = False
 
-        self.imgX = -1
-        self.imgY = -1
+        self.imgX = -15
+        self.imgY = -15
         self.drawXY = True
 
         # setup for forward kinematics 
@@ -92,6 +92,7 @@ class WedgeToPalpateValidation:
     def select_point_cb(self, event,x,y,flags,param):
         if self.img_msg_received and self.img_info_msg_received and self.depth_msg_received:
             if event == cv2.EVENT_LBUTTONDOWN: # Left mouse button
+                # pass
                 # rospy.loginfo("Mouse event: {} {}".format(x,y))
                 self.imgX = x
                 self.imgY = y
@@ -228,8 +229,8 @@ class WedgeToPalpateValidation:
         wpose = self.group.get_current_pose().pose
         
         dt = 0.1
-        dx = 0.01
-        dy = 0.01
+        dx = 0.025
+        dy = 0.025
 
         last_z = 0.85
         # for i in range(25, q1pred.shape[0] - 25):
@@ -261,15 +262,13 @@ class WedgeToPalpateValidation:
             # print ( trans[2], np.mean(all_z_points_on_breast),  np.median(all_z_points_on_breast), z_index[0].shape)
 
             if (all_z_points_on_breast.shape[0] > 0):
-                wpose.position.z = np.median(all_z_points_on_breast) + 0.0095
-                last_z = np.median(all_z_points_on_breast) + 0.0095
+                wpose.position.z = np.median(all_z_points_on_breast) - 0.0075
+                last_z = np.median(all_z_points_on_breast) - 0.0075
                 
-
             else:
-                wpose.position.z = last_z
-
-                if trans[2] < 0.080: 
-                    trans[2] = 0.080
+                # wpose.position.z = last_z
+                if trans[2] < 0.085: 
+                    trans[2] = 0.085
                 wpose.position.z = trans[2]                    
 
             wpose.orientation.x = rot[0]

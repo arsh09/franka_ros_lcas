@@ -58,6 +58,6 @@ if __name__ == "__main__":
     # print (traj_true[:30])
     q1pred,q2pred,q3pred,q4pred,q5pred,q6pred,q7pred = traj_true[0:150], traj_true[150:300], traj_true[300:450], traj_true[450:600], traj_true[600:750], traj_true[750:900], traj_true[900:1050]
 
-    print ("  \nPredicted DMP weights are saved in the file. Press 'p' to display the trajectory...")
+    print ("\n  Predicted ProMPs weights for WPP. Joint trajectory is saved in the file. \n  Press 'p' to display the trajectory...")
 
     np.save('/home/arshad/catkin_ws/predicted_joints_values.npy', traj_true)
