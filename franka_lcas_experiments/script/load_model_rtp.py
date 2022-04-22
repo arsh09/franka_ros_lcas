@@ -1,4 +1,16 @@
+"""
+this Python-3 script is used in conjunction with RTP task node. 
+As it is almost impossible to install tensorflow on Python-2 and 
+use Python-3 with ROS-kinetic version, we have to do this 
+work-around where the predictions from the RTP trained model 
+is done in Python-3 and its results are saved in an npy file. 
 
+On the Python-2 ROS-node side, we save the image that is an 
+input to this image and read the npy file that is the output of 
+this file. 
+"""
+
+# imports
 import warnings
 warnings.filterwarnings('ignore')
 import numpy as np
@@ -8,7 +20,6 @@ from tensorflow.keras.models import Model
 import tensorflow as tf
 from PIL import Image
 from utils_rtp import ProMP
-
 
 class Predictor:
 
@@ -39,13 +50,10 @@ class Predictor:
         return np.asarray(image.resize((256, 256)))
 
     def predict(self, image_numpy):
-        # image_numpy = np.expand_dims(image_numpy, axis=0)
         latent_img = self.encoder.predict(image_numpy/255)
         q_val_pred = self.exp_model.predict(latent_img)
-
         traj_pred = np.matmul(self.all_phi, np.transpose(q_val_pred)).squeeze()
-
-        return traj_pred #np.reshape(traj_pred, (-1, 150))
+        return traj_pred  
 
 
 if __name__ == "__main__":
