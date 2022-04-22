@@ -1,3 +1,6 @@
+
+import warnings
+warnings.filterwarnings('ignore')
 import numpy as np
 import os, sys 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
@@ -7,12 +10,11 @@ from PIL import Image
 from utils_rtp import ProMP
 
 
-
 class Predictor:
 
     def __init__(self, encoder_model_path, predictor_model_path):
-        self.all_phi = self.promp_train()
 
+        self.all_phi = self.promp_train()
         encoder_model = tf.keras.models.load_model(encoder_model_path)
         self.encoder = Model(encoder_model.input, encoder_model.get_layer("bottleneck").output)
         self.exp_model = tf.keras.models.load_model(predictor_model_path, compile=False)
@@ -47,12 +49,13 @@ class Predictor:
 
 
 if __name__ == "__main__":
-    ENCODED_MODEL_PATH = "/home/arshad/Documents/reach_to_palpate_validation_models/encoded_model_regions"
-    PREDICTOR_MODEL = "/home/arshad/Documents/reach_to_palpate_validation_models/model_cnn_rgb_1"
-    image = np.load( "/home/arshad/catkin_ws/image_xy_rtp.npy" )
-
+    
+    BASE_PATH = "/home/arshad/Documents/artemis_project_trained_models/reach_to_palpate_validation_models"
+    ENCODED_MODEL_PATH = os.path.join( BASE_PATH, "encoded_model_regions/" )
+    PREDICTOR_MODEL = os.path.join( BASE_PATH, "model_cnn_rgb_1" )
+    image = np.load( os.path.join ( BASE_PATH, "image_xy_rtp.npy") )
     predictor = Predictor(ENCODED_MODEL_PATH, PREDICTOR_MODEL)
     traj = predictor.predict(image)
-
-    np.save("/home/arshad/catkin_ws/predicted_joints_values_rtp.npy", traj)
+    print (traj.shape)
+    np.save( os.path.join ( BASE_PATH, "predicted_joints_values_rtp.npy" ), traj )
     print ("\n  Predicted ProMPs weights for RTP task. Joint trajectory is saved in the file. \n  Press 'p' to display the trajectory...")
