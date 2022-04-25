@@ -50,6 +50,8 @@ class ReachToPalpateTaskValidation:
         group_name = "panda_arm"
         self.group = moveit_commander.MoveGroupCommander(group_name)
         self.display_trajectory_publisher = rospy.Publisher( "/move_group/display_planned_path", DisplayTrajectory, queue_size=20)
+        self.scene = moveit_commander.PlanningSceneInterface()
+        self.robot = moveit_commander.RobotCommander()
         
         # you can directly publish a joint trajectory to 
         # this topic as well. However, it will not be smooth
@@ -148,8 +150,16 @@ class ReachToPalpateTaskValidation:
             class variable so you can use it in do_execute_planned_path. 
         """ 
 
-        pass
+        q1pred,q2pred,q3pred,q4pred,q5pred,q6pred,q7pred = joint_trajectory[0:150], joint_trajectory[150:300], joint_trajectory[300:450], joint_trajectory[450:600], joint_trajectory[600:750], joint_trajectory[750:900], joint_trajectory[900:1050]
+        # nipple A
+        nippleA_pose = [-0.0543767, 0.471072, 0.171324, -2.03379, -0.0378312, 2.4434, 0.951624]
+        is_start_pose = True
 
+        # cartesian space path plan 
+        waypoints = []
+        wpose = self.group.get_current_pose().pose
+        
+        
         
     def do_execute_planned_path(self):
         if (self.planned_path != None):

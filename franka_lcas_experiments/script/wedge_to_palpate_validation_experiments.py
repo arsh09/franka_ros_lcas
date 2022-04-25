@@ -16,6 +16,7 @@ import numpy as np
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import pandas as pd
 
+import os 
 
 # for forward kinematics
 from urdf_parser_py.urdf import URDF
@@ -41,6 +42,8 @@ class WedgeToPalpateValidation:
         self.group = moveit_commander.MoveGroupCommander(group_name)
         self.scene = moveit_commander.PlanningSceneInterface()
         self.display_trajectory_publisher = rospy.Publisher( "/move_group/display_planned_path", moveit_msgs.msg.DisplayTrajectory, queue_size=20)
+
+        self.BASE_PATH = "/home/arshad/Documents/artemis_project_trained_models/reach_to_palpate_validation_models"
 
         self.bridge = CvBridge()
 
@@ -321,14 +324,22 @@ class WedgeToPalpateValidation:
         print("  7) Press ESC to close" )    
 
     def loop(self):
+        """ this loop function continously run 
+            and shows the image window. 
 
+            It also listens the key presses on the 
+            image window. 
+
+            As you can see that when the user clicks 'p' 
+            the predicted joint trajectory is read from 
+            the npy file (that was written there by 
+            a Python3 script that uses RTP task trained model.)
+            
+        """
         while not rospy.is_shutdown(): 
-            # pass
-            if self.img_msg_received and self.depth_msg_received:
-                w,h,c = self.img_msg.shape 
-                if self.drawXY and self.imgX != None : 
-                    cv2.circle( self.img_shown, (self.imgX, self.imgY), 10, (40,48,88), -1)
+            if self.img_msg_received:
 
+                w,h,c = self.img_msg.shape 
                 if w == 256 and h == 256 :
                     cv2.imshow('image', self.img_shown)
 
@@ -339,32 +350,20 @@ class WedgeToPalpateValidation:
                     continue
                 else:
                     self.print_options()
-                    if k == ord('c'):
-                        self.drawXY = not self.drawXY
                     if k == ord('s'): 
-                        cv2.imwrite('./image_rtp.png', self.img_msg_rtp)
-                        np.save('./image_xy_rtp.npy', np.reshape( self.img_msg_rtp, (1,256,256, 3) ) )
-                        cv2.circle( self.img_msg, (self.imgX, self.imgY), 10, (40,48,88), -1)
-                        cv2.imwrite('./image.png', self.img_msg)
-                        saved_img = np.reshape( self.img_msg, (1,256,256,3))
-                        np.save( './image_xy.npy', saved_img )
-                        target_point = np.array( [self.imgX, self.imgY ] ) 
-                        np.save('./image_target_xy.npy', target_point )
-
+                        cv2.imwrite( os.path.join( self.BASE_PATH, 'image_rtp.png' ) , self.img_msg_rtp)
+                        np.save( os.path.join( self.BASE_PATH , 'image_xy_rtp.npy' ) , np.reshape( self.img_msg_rtp, (1,256,256, 3) ) )
+                        
                     if k == ord('r'):
-                        command = ["python3", "/home/arshad/catkin_ws/src/franka_ros_lcas/franka_lcas_experiments/script/load_model_rtp.py"]
+                        command = ["python3", "/home/arshad/franka_ws/src/franka_ros_lcas/franka_lcas_experiments/script/load_model_rtp.py"]
                         subprocess.call(command)
-
-                    if k == ord('w'):
-                        command = ["python3", "/home/arshad/catkin_ws/src/franka_ros_lcas/franka_lcas_experiments/script/load_model.py"]
-                        subprocess.call(command)
-
+ 
                     if k == ord('h'):
                         self.go_to_home(pose="poseA")
 
                     if k == ord('p'):
-                        traj_true = np.load('/home/arshad/catkin_ws/predicted_joints_values.npy')
-                        self.move_robot_to_joint_trajectory(traj_true)
+                        joint_trajectory_predicted = np.load( os.path.join( self.BASE_PATH, 'predicted_joints_values_rtp.npy') )
+                        self.move_robot_to_joint_trajectory(joint_trajectory_predicted)
 
                     if k == ord('e'):
                         self.do_execute_planned_path()
