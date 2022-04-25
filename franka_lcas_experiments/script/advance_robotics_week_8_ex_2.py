@@ -50,6 +50,7 @@ class ReachToPalpateTaskValidation:
         group_name = "panda_arm"
         self.group = moveit_commander.MoveGroupCommander(group_name)
         self.display_trajectory_publisher = rospy.Publisher( "/move_group/display_planned_path", DisplayTrajectory, queue_size=20)
+        self.scene = moveit_commander.PlanningSceneInterface()
         
         # you can directly publish a joint trajectory to 
         # this topic as well. However, it will not be smooth
