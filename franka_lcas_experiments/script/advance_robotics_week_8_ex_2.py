@@ -159,7 +159,7 @@ class ReachToPalpateTaskValidation:
         waypoints = []
         wpose = self.group.get_current_pose().pose
         
-        
+
         
     def do_execute_planned_path(self):
         if (self.planned_path != None):
